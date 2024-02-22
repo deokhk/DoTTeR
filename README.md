@@ -1,4 +1,4 @@
-# DoTTeR
+# Denoising Table-Text Retrieval for Open-Domain Question Answering
 This repository contains the source code for our LREC-COLING 2024 paper (to appear) "Denoising Table-Text Retrieval for Open-Domain Question Answering".
 
 
