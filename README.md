@@ -21,11 +21,11 @@ We follow the same data preprocessing steps as OTTeR, and provide the instructio
 ### Step0-1: OTT-QA dataset
 
 ```bash
-git clone https://github.com/wenhuchen/OTT-QA.git
-cp OTT-QA/release_data/* ./data_ottqa
+mkdir data_wikitable
+mkdir data_ottqa
 
-mv OTT-QA/data/traindev_request_tok ./data_wikitable/
-mv OTT_QA/data/traindev_tables_tok ./data_wikitable/
+git clone https://github.com/wenhuchen/OTT-QA.git
+cp OTT-QA/released_data/* ./data_ottqa
 ```
 
 ### Step0-2: OTT-QA all tables and passages
