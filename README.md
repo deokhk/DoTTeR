@@ -319,7 +319,8 @@ python -m scripts.train_final_qa \
     --threads 4 \
 
 ```
-
+## References
+Will be added shortly.
 
 ## Acknowledgments
 This codebase is built upon the codebase from [OTTeR](https://github.com/Jun-jie-Huang/OTTeR).
