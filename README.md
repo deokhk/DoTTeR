@@ -1,5 +1,5 @@
 # Denoising Table-Text Retrieval for Open-Domain Question Answering
-Source code for our LREC-COLING 2024 paper (to appear) "Denoising Table-Text Retrieval for Open-Domain Question Answering".
+Source code for "Denoising Table-Text Retrieval for Open-Domain Question Answering" (LREC-COLING 2024)
 
 ## Requirements
 
