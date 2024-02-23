@@ -16,9 +16,9 @@ sh create_env.sh
 This codebase is built upon [OTTeR](https://github.com/Jun-jie-Huang/OTTeR). 
 We follow the same data preprocessing steps as OTTeR, and provide the instruction mostly taken from OTTeR's README. For the rest of the README, we assume you are at the root of the repository, if not explicitly mentioned by "cd".
 
-#### Step 0: Download dataset
+## Step 0: Download dataset
 
-##### Step0-1: OTT-QA dataset
+### Step0-1: OTT-QA dataset
 
 ```bash
 git clone https://github.com/wenhuchen/OTT-QA.git
@@ -28,7 +28,7 @@ mv OTT-QA/data/traindev_request_tok ./data_wikitable/
 mv OTT_QA/data/traindev_tables_tok ./data_wikitable/
 ```
 
-##### Step0-2: OTT-QA all tables and passages
+### Step0-2: OTT-QA all tables and passages
 
 ```bash
 cd data_wikitable/
@@ -37,14 +37,14 @@ wget https://opendomainhybridqa.s3-us-west-2.amazonaws.com/all_passages.json
 cd ../
 ```
 
-##### Step0-3: Download fused block preprocessed from OTTeR
+### Step0-3: Download fused block preprocessed from OTTeR
 Download OTTeR's processed linked passage from [all_constructed_blink_tables.json](https://drive.google.com/drive/folders/1aQTOWdJ-khBm7x30y9w7LLTgT3tQ0xCy?usp=sharing). Then unzip it with `gunzip` and move the json file to `./data_wikitable`.
 
-#### Step 1: Denoising OTT-QA dataset
+## Step 1: Denoising OTT-QA dataset
 To denoise the OTT-QA dataset, we need to train false-positive removal model.
 Run the following command below to prepare the data for training the model.
 
-##### Step1-1: Preprocess the data
+### Step1-1: Preprocess the data
 ```bash
 mkdir ./preprocessed_data/
 mkdir ./preprocessed_data/false_positive_removal
@@ -57,7 +57,7 @@ python false_positive_removal_preprocess.py --split dev --aug_blink
 ```
 Then it will make "train_intable_bm25_blink_false_positive_removal.pkl" and "dev__blink_false_positive_removal.pkl" in "./preprocessed_data/false_positive_removal". Let the path of former be `TRAIN_FILE` and the latter be `DEV_FILE`.
 
-##### Step1-2: Train the model
+### Step1-2: Train the model
 Then, train the false positive removal model with the following command.
 
 ```bash
@@ -79,7 +79,7 @@ CUDA_VISIBLE_DEVICES=2,3 torchrun --nproc_per_node=${NUM_GPUS} ./scripts/train_r
 ```
 This will save the best model to `./model/trained_models/false_positive_removal/best_model`. Let the path of the best model be `MODEL_PATH`.
 
-##### Step1-3: Denoise the OTT-QA dataset
+### Step1-3: Denoise the OTT-QA dataset
 ```bash
 mkdir ./preprocessed_data/retrieval
 cd ./preprocessing
@@ -89,7 +89,7 @@ CUDA_VISIBLE_DEVICES=1 python retriever_preprocess.py --split dev --nega intable
 ```
 This will make "train_intable_contra_blink_row_denoise.pkl" and "dev_intable_contra_blink_row_denoise.pkl" in "./preprocessed_data/retrieval". We denote the path of former as `DENOISED_TRAIN_FILE` and the latter as `DENOISED_DEV_FILE`.
 
-#### Step 2: Training the rank-aware column encoder
+## Step 2: Training the rank-aware column encoder
 ```bash
 
 python -m scripts.train_RATE \
@@ -107,8 +107,8 @@ We recommend `OUTPUT_DIR` to be an absolute path for `./model/trained_models/RAT
 
 This will save the best model to `./model/trained_models/RATE/best_checkpoint`. Let the path of the best model be `RATE_MODEL_PATH`.
 
-#### Step 3: Training the DoTTeR model (retriever)
-##### Step3-1: Download synthetic-pretrained checkpoint from OTTeR
+## Step 3: Training the DoTTeR model (retriever)
+### Step3-1: Download synthetic-pretrained checkpoint from OTTeR
 We initialize the encoder with the mixed-modality synthetic pretrained checkpoint from OTTeR.
 Download the checkpoint from [here](https://drive.google.com/drive/folders/1aQTOWdJ-khBm7x30y9w7LLTgT3tQ0xCy). 
 ```
@@ -116,7 +116,7 @@ unzip -d ./checkpoint-pretrain checkpoint-pretrain.zip
 ```
 Then, move the ./checkpoint-pretrain to `./model/`.
 
-##### Step3-2: Train the DoTTeR model
+### Step3-2: Train the DoTTeR model
 We provide a shell script to train the DoTTeR model.
 Before running the script, you need to specify the path to the preprocessed data and the path to the RATE model.
 ```bash
@@ -124,16 +124,16 @@ sh train_dotter.sh
 ```
 This will save the best model as `checkpoint_best.pt` in `RT_MODEL_PATH`.
 
-##### Step 4: Evaluation
+## Step 4: Evaluation
 
-##### Step 4-1: Build retrieval corpus (fused blocks)
+### Step 4-1: Build retrieval corpus (fused blocks)
 ```bash
 cd ./preprocessing
 python corpus_preprocess.py
 ```
 This will make "table_corpus_blink.pkl" in "./preprocessed_data/retrieval". 
 
-##### Step 4-2: Encode corpus with the trained DoTTeR model
+### Step 4-2: Encode corpus with the trained DoTTeR model
 
 We first encode the OTT-QA dev set, then the table corpus(fused blocks) with the trained DoTTeR model.
 ```bash
@@ -176,7 +176,7 @@ python -m scripts.encode_corpus \
     --num_workers 24
 ```
 
-##### Step 4-3: Build index and search with FAISS
+### Step 4-3: Build index and search with FAISS
 
 Table recall can be evaluated with the following command.
 ```bash
@@ -199,7 +199,7 @@ python -m scripts.eval_block_recall \
      --retrieval_results_file ${RT_MODEL_PATH}/indexed_embeddings/dev_output_k100_${TABLE_CORPUS}.json
 ```
 
-##### Step 4-4: Preparing QA dev data from retrieval outputs
+### Step 4-4: Preparing QA dev data from retrieval outputs
 This step will prepare the QA dev data from the retrieval outputs. We use the top 15 table-text blocks(fused blocks) for QA
 
 ```bash
@@ -211,8 +211,8 @@ python -m preprocessing.qa_preprocess \
      --qa_save_path ${RT_MODEL_PATH}/dev_preprocessed_${TABLE_CORPUS}_k100cat${CONCAT_TBS}.json
 ```
 
-#### Step 5: QA model
-##### Step 5-1: Prepare QA training data
+## Step 5: QA model
+### Step 5-1: Prepare QA training data
 This step will find the top 15 table-text blocks for each question in the training set using DoTTeR, and prepare the training data for the QA model.
 
 ```bash
@@ -254,7 +254,7 @@ python ../preprocessing/qa_preprocess.py \
 ```
 
 
-##### Step 5-2: Train the QA model
+### Step 5-2: Train the QA model
 We use the same training script from OTTeR to train the QA model.
 
 ```bash
@@ -294,7 +294,7 @@ python -m scripts.train_final_qa \
 ```
 In this script, we don't support setting effective batch size. Instead, we set the batch size per GPU and the number of GPUs. We use batch size 16 and 4 GPUs in the example above.
 
-##### Step 5-3: Evaluting the QA model
+### Step 5-3: Evaluting the QA model
 
 ```bash
 export PREDICT_OUT=dotter_qa_dev_result
