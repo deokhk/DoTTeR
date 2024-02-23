@@ -63,7 +63,7 @@ Then, train the false positive removal model with the following command.
 ```bash
 #!/bin/bash 
 NUM_GPUS=2
-CUDA_VISIBLE_DEVICES=2,3 torchrun --nproc_per_node=${NUM_GPUS} ./scripts/train_row_classifier.py \
+CUDA_VISIBLE_DEVICES=2,3 torchrun --nproc_per_node=${NUM_GPUS} ./scripts/train_false_positive_removal.py \
     --train_file ${TRAIN_FILE} \
     --dev_file ${DEV_FILE} \
     --seed 42 \
