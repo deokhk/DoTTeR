@@ -320,7 +320,29 @@ python -m scripts.train_final_qa \
 
 ```
 ## References
-Will be added shortly.
+```
+@inproceedings{kang-etal-2024-denoising-table,
+    title = "Denoising Table-Text Retrieval for Open-Domain Question Answering",
+    author = "Kang, Deokhyung  and
+      Jung, Baikjin  and
+      Kim, Yunsu  and
+      Lee, Gary Geunbae",
+    editor = "Calzolari, Nicoletta  and
+      Kan, Min-Yen  and
+      Hoste, Veronique  and
+      Lenci, Alessandro  and
+      Sakti, Sakriani  and
+      Xue, Nianwen",
+    booktitle = "Proceedings of the 2024 Joint International Conference on Computational Linguistics, Language Resources and Evaluation (LREC-COLING 2024)",
+    month = may,
+    year = "2024",
+    address = "Torino, Italia",
+    publisher = "ELRA and ICCL",
+    url = "https://aclanthology.org/2024.lrec-main.414",
+    pages = "4634--4640",
+    abstract = "In table-text open-domain question answering, a retriever system retrieves relevant evidence from tables and text to answer questions. Previous studies in table-text open-domain question answering have two common challenges: firstly, their retrievers can be affected by false-positive labels in training datasets; secondly, they may struggle to provide appropriate evidence for questions that require reasoning across the table. To address these issues, we propose Denoised Table-Text Retriever (DoTTeR). Our approach involves utilizing a denoised training dataset with fewer false positive labels by discarding instances with lower question-relevance scores measured through a false positive detection model. Subsequently, we integrate table-level ranking information into the retriever to assist in finding evidence for questions that demand reasoning across the table. To encode this ranking information, we fine-tune a rank-aware column encoder to identify minimum and maximum values within a column. Experimental results demonstrate that DoTTeR significantly outperforms strong baselines on both retrieval recall and downstream QA tasks. Our code is available at https://github.com/deokhk/DoTTeR.",
+}
+```
 
 ## Acknowledgments
 This codebase is built upon the codebase from [OTTeR](https://github.com/Jun-jie-Huang/OTTeR).
